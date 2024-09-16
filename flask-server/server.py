@@ -379,9 +379,12 @@ def manage_my_events():
     if 'username' not in session:
         flash('Please login to manage your events.', 'danger')
         return redirect(url_for('login'))
-
+    
+    now = datetime.now().strftime('%Y-%m-%d')
     username = session['username']
-    events = list(events_collection.find({'creator': username}).sort([('date', 1), ('time', 1)]))
+    events = list(events_collection.find({
+        'date': {'$gte': now},
+        'creator': username}).sort([('date', 1), ('time', 1)]))
     
     if len(events) == 0:
         flash('No Events found.', 'info')
