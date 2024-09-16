@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            display: inline-block;
+            font-weight: bold;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .button-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .back-button-container {
+            text-align: left;
+        }
+        .button-link {
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+            display: inline-block;
+        }
+        .button-link:hover {
+            background-color: #007BFF;
+            color: #fff;
+        }
+        .flash-message {
+            padding: 15px;
+            margin: 15px auto;
+            border-radius: 8px;
+            font-size: 1em;
+            text-align: center;
+            max-width: 500px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flash-message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search Events</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form action="{{ url_for('search_events') }}" method="post">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="event_type">Event Type:</label>
+                <select id="event_type" name="event_type">
+                    <option value="">Select Event Type</option>
+                    <option value="meet up">Meet Up</option>
+                    <option value="conference">Conference</option>
+                    <option value="party">Party</option>
+                    <option value="festival">Festival</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location">
+            </div>
+            <div class="button-container">
+                <button type="submit">Search</button>
+            </div>
+            <div class="back-button-container">
+                <a href="{{ url_for('home') }}" class="button-link">Back to Home</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

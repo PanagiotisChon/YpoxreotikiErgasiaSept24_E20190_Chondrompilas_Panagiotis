@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        .event-details {
+            margin-bottom: 20px;
+        }
+        .event-description {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .participants, .rsvp-form {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        form {
+            margin-top: 10px;
+        }
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .flash-message {
+            padding: 15px;
+            margin: 15px auto;
+            border-radius: 8px;
+            font-size: 1em;
+            text-align: center;
+            max-width: 500px;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-message.danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flash-message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button-container a, .button-container button {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007BFF;
+            border: 2px solid #007BFF;
+        }
+        .button-container a:hover, .button-container button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ event.title }}</h1>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="event-details">
+            <div class="event-description">
+                <p><strong>Description:</strong></p>
+                <p>{{ event.description }}</p>
+            </div>
+            <p><strong>Date:</strong> {{ event.date }}</p>
+            <p><strong>Time:</strong> {{ event.time }}</p>
+            <p><strong>Location:</strong> {{ event.location }}</p>
+            <p><strong>Type:</strong> {{ event.event_type }}</p>
+            <p><strong>Organizer:</strong> {{ event.creator }}</p>
+        </div>
+
+        <div class="participants">
+            <h2>Participants</h2>
+            <ul>
+                {% for participant in event.participants %}
+                    <li>
+                        {% if participant.ans == 'yes' %}
+                            User {{ participant.username }} will come to the event.
+                        {% elif participant.ans == 'not sure' %}
+                            User {{ participant.username }} might come to the event.
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>        
+
+        <div class="rsvp-form">
+            <h2>Let Us Know If You'll Join</h2>
+            <form method="POST" action="">
+                <label for="participation">
+                    Will you attend?
+                    <select name="participation" id="participation">
+                        <option value="yes">Yes</option>
+                        <option value="not sure">Not Sure</option>
+                    </select>
+                </label>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+
+        <div class="button-container">
+            <a href="javascript:history.back()">Go Back</a>
+        </div>
+    </div>
+</body>
+</html>
